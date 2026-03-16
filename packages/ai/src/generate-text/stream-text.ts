@@ -2383,6 +2383,7 @@ class DefaultStreamTextResult<
                   : {}),
                 ...(dynamic != null ? { dynamic } : {}),
                 ...(part.title != null ? { title: part.title } : {}),
+                ...(part._meta != null ? { _meta: part._meta } : {}),
               });
               break;
             }
@@ -2398,6 +2399,13 @@ class DefaultStreamTextResult<
 
             case 'tool-call': {
               const dynamic = isDynamic(part);
+              const toolMeta = (
+                this.tools?.[part.toolName] as
+                  | {
+                      _meta?: Record<string, unknown>;
+                    }
+                  | undefined
+              )?._meta as Record<string, unknown> | undefined;
 
               if (part.invalid) {
                 controller.enqueue({
@@ -2429,6 +2437,7 @@ class DefaultStreamTextResult<
                     : {}),
                   ...(dynamic != null ? { dynamic } : {}),
                   ...(part.title != null ? { title: part.title } : {}),
+                  ...(toolMeta != null ? { _meta: toolMeta } : {}),
                 });
               }
 

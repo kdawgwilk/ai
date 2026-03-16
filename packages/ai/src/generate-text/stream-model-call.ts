@@ -381,12 +381,17 @@ function createLanguageModelStreamPartToModelCallStreamPartTransform<
         }
 
         case 'tool-input-start': {
-          const tool = tools?.[chunk.toolName];
+          const tool = tools?.[chunk.toolName] as
+            | (ToolSet[string] & {
+                _meta?: Record<string, unknown>;
+              })
+            | undefined;
 
           controller.enqueue({
             ...chunk,
             dynamic: chunk.dynamic ?? tool?.type === 'dynamic',
             title: tool?.title,
+            ...(tool?._meta != null ? { _meta: tool._meta } : {}),
           });
           break;
         }

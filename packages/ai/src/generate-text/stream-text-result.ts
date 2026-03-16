@@ -419,6 +419,7 @@ export type TextStreamToolInputStartPart = {
   providerExecuted?: boolean;
   dynamic?: boolean;
   title?: string;
+  _meta?: Record<string, unknown>;
 };
 
 export type TextStreamToolInputEndPart = {
